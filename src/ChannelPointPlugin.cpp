@@ -185,7 +185,7 @@ QWidget* ChannelPointPlugin::createWidget(QWidget* parent)
     return m_mainWidget;
 }
 
-void ChannelPointPlugin::onRewardRedemptionReceived(const TwitchRewardRedemption& redemption)
+void ChannelPointPlugin::onRewardRedeemed(const TwitchRewardRedemption& redemption)
 {
     if (!m_effectMgr || !m_queueMgr || !m_analyticsMgr) return;
 

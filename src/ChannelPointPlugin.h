@@ -34,7 +34,8 @@ public:
 
     // イベント受信ハンドラ
     virtual void onCommentReceived(const TwitchComment& comment) override { Q_UNUSED(comment); }
-    virtual void onRewardRedemptionReceived(const TwitchRewardRedemption& redemption) override;
+    virtual void onRewardRedeemed(const TwitchRewardRedemption& redemption) override;
+    virtual void onTick() override {}
 
 private slots:
     void onTestPlayRequested(const QString& rewardId);
