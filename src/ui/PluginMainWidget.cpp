@@ -386,19 +386,36 @@ void PluginMainWidget::onAddNewRewardClicked()
 void PluginMainWidget::onTwitchSyncClicked()
 {
     int restoredCount = 0;
+
+    // 1. ホストアプリコアから Twitch チャンネルポイント報酬一覧を取得
+    if (m_context && m_effectMgr) {
+        QList<TwitchRewardInfo> rewards = m_context->getChannelPointRewards();
+        for (const auto& info : rewards) {
+            if (!info.id.isEmpty()) {
+                m_effectMgr->ensureRewardRegistered(info.id, info.title, info.cost);
+                RewardEffectSetting setting = m_effectMgr->getSetting(info.id);
+                setting.enabled = info.isEnabled;
+                setting.points = info.cost;
+                m_effectMgr->updateSetting(setting);
+                restoredCount++;
+            }
+        }
+    }
+
+    // 2. 過去の受信アナリティクス履歴からも同期
     if (m_analyticsMgr && m_effectMgr) {
         QList<StreamSession> sessions = m_analyticsMgr->getAllSessions();
         for (const auto& s : sessions) {
             for (const auto& rStat : s.rewardStats.values()) {
                 if (!rStat.rewardId.isEmpty()) {
                     m_effectMgr->ensureRewardRegistered(rStat.rewardId, rStat.rewardName, rStat.totalPoints / (rStat.count > 0 ? rStat.count : 1));
-                    restoredCount++;
                 }
             }
         }
     }
+
     refreshRewardList();
-    QMessageBox::information(this, "Twitch同期", QString("過去のイベントおよび受信履歴より %1 件のチャンネルポイント項目を同期・検出しました。").arg(restoredCount));
+    QMessageBox::information(this, "Twitch同期", QString("Twitch連携モジュールおよび受信履歴より %1 件のチャンネルポイント項目を同期しました。").arg(restoredCount));
 }
 
 void PluginMainWidget::onSaveSettingClicked()

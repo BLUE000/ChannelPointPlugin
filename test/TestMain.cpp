@@ -20,6 +20,7 @@ public:
         sendCount++;
     }
     virtual void postDiscordWebhook(const QString& webhookUrl, const QJsonObject& payload) override { Q_UNUSED(webhookUrl); Q_UNUSED(payload); }
+    virtual QList<TwitchRewardInfo> getChannelPointRewards() override { return mockRewards; }
     virtual QString getPluginDirectory() const override { return "."; }
     virtual QString getCipherKey() const override { return "test_cipher_key"; }
     virtual bool writeEncryptedFile(const QString& relativePath, const QByteArray& data) override {
@@ -40,6 +41,7 @@ public:
     QString lastAction;
     QJsonObject lastPayload;
     int sendCount = 0;
+    QList<TwitchRewardInfo> mockRewards;
     QMap<QString, QByteArray> storage;
 };
 
