@@ -3,6 +3,7 @@ scripts/
 .ai_rules.md
 WIP_STATE.md
 build/
+build_release/
 tests/
 dist/
 tmp/

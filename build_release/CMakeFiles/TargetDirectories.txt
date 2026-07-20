@@ -1,9 +1,0 @@
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/ChannelPointPlugin.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/PluginAutoTest.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/test.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/edit_cache.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/rebuild_cache.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/ChannelPointPlugin_autogen_timestamp_deps.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/ChannelPointPlugin_autogen.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/PluginAutoTest_autogen_timestamp_deps.dir
-D:/prog/C++/ChannelPointPlugin/build_release/CMakeFiles/PluginAutoTest_autogen.dir
