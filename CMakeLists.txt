@@ -38,6 +38,7 @@ add_library(ChannelPointPlugin SHARED
     ${PLUGIN_SOURCES}
     ${PLUGIN_HEADERS}
 )
+set_target_properties(ChannelPointPlugin PROPERTIES PREFIX "")
 
 target_include_directories(ChannelPointPlugin PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
