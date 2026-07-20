@@ -2,7 +2,7 @@
 #define CHANNEL_POINT_PLUGIN_H
 
 #include <QObject>
-#include "../../tests/src/shared/plugin_interface.h"
+#include "../tests/src/shared/plugin_interface.h"
 
 class EffectManager;
 class QueueManager;

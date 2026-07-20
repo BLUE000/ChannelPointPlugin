@@ -1,0 +1,3 @@
+C:\tmp\mingw64\bin\cmake.exe -E rm -f CMakeFiles\PluginAutoTest.dir/objects.a
+C:\Qt\Tools\mingw1310_64\bin\ar.exe qc CMakeFiles\PluginAutoTest.dir/objects.a @CMakeFiles\PluginAutoTest.dir\objects1.rsp
+C:\Qt\Tools\mingw1310_64\bin\g++.exe -O3 -DNDEBUG -Wl,--whole-archive CMakeFiles\PluginAutoTest.dir/objects.a -Wl,--no-whole-archive -o PluginAutoTest.exe -Wl,--out-implib,libPluginAutoTest.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\PluginAutoTest.dir\linkLibs.rsp

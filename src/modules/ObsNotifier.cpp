@@ -1,5 +1,5 @@
 #include "ObsNotifier.h"
-#include "../../../tests/src/shared/plugin_interface.h"
+#include "../../tests/src/shared/plugin_interface.h"
 #include <QDebug>
 
 ObsNotifier::ObsNotifier(ICoreContext* context, QObject* parent)

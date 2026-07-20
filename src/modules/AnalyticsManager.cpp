@@ -1,6 +1,6 @@
 #include "AnalyticsManager.h"
 #include "EffectManager.h"
-#include "../../../tests/src/shared/plugin_interface.h"
+#include "../../tests/src/shared/plugin_interface.h"
 #include <QDebug>
 #include <QTextStream>
 

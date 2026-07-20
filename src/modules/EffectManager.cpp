@@ -1,5 +1,5 @@
 #include "EffectManager.h"
-#include "../../../tests/src/shared/plugin_interface.h"
+#include "../../tests/src/shared/plugin_interface.h"
 #include <QFile>
 #include <QDir>
 #include <QDebug>

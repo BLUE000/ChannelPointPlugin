@@ -3,7 +3,7 @@
 #include "../modules/QueueManager.h"
 #include "../modules/AnalyticsManager.h"
 #include "VisualPreviewWidget.h"
-#include "../../../tests/src/shared/plugin_interface.h"
+#include "../../tests/src/shared/plugin_interface.h"
 
 #include <QVBoxLayout>
 #include <QHBoxLayout>

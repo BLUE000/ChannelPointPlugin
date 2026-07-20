@@ -1,0 +1,6 @@
+set(__QT_DEPLOY_TARGET_ChannelPointPlugin_FILE D:/prog/C++/ChannelPointPlugin/build_release/libChannelPointPlugin.dll)
+set(__QT_DEPLOY_TARGET_ChannelPointPlugin_TYPE SHARED_LIBRARY)
+set(__QT_DEPLOY_TARGET_ChannelPointPlugin_RUNTIME_DLLS C:/Qt/6.10.1/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Network.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Core.dll)
+set(__QT_DEPLOY_TARGET_PluginAutoTest_FILE D:/prog/C++/ChannelPointPlugin/build_release/PluginAutoTest.exe)
+set(__QT_DEPLOY_TARGET_PluginAutoTest_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_PluginAutoTest_RUNTIME_DLLS C:/Qt/6.10.1/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Network.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Test.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.10.1/mingw_64/bin/Qt6Core.dll)
