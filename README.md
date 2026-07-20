@@ -1,0 +1,2 @@
+# ChannelPointPlugin
+Twitchチャンネル管理ツール用チャンネルポイント演出プラグイン
