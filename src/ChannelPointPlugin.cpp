@@ -24,10 +24,21 @@ void ChannelPointPlugin::initialize(ICoreContext* context)
     m_context = context;
     if (!m_context) return;
 
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "Starting initialization...");
+
     m_effectMgr = new EffectManager(m_context, this);
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "EffectManager initialized.");
+
     m_obsNotifier = new ObsNotifier(m_context, this);
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "ObsNotifier initialized.");
+
     m_queueMgr = new QueueManager(m_effectMgr, m_obsNotifier, this);
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "QueueManager initialized.");
+
     m_analyticsMgr = new AnalyticsManager(m_context, m_effectMgr, this);
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "AnalyticsManager initialized.");
+
+    m_context->writeLog("INFO", "ChannelPointPlugin", "initialize", "Initialization completed successfully.");
 }
 
 void ChannelPointPlugin::shutdown()
@@ -42,6 +53,9 @@ QByteArray ChannelPointPlugin::iconPngData() const
     static QByteArray cachedIconData;
     if (!cachedIconData.isEmpty()) {
         return cachedIconData;
+    }
+    if (m_context) {
+        m_context->writeLog("INFO", "ChannelPointPlugin", "iconPngData", "Loading iconPngData from pic/ChannelPoint.png");
     }
     // pic/ChannelPoint.png を返却
     QFile file("pic/ChannelPoint.png");
@@ -182,10 +196,16 @@ body {
 
 QWidget* ChannelPointPlugin::createWidget(QWidget* parent)
 {
+    if (m_context) {
+        m_context->writeLog("INFO", "ChannelPointPlugin", "createWidget", "createWidget called.");
+    }
     if (!m_mainWidget) {
         m_mainWidget = new PluginMainWidget(m_context, m_effectMgr, m_queueMgr, m_analyticsMgr, parent);
         connect(m_mainWidget, &PluginMainWidget::testPlayRequested, this, &ChannelPointPlugin::onTestPlayRequested);
         connect(m_mainWidget, &PluginMainWidget::emergencyStopTriggered, this, &ChannelPointPlugin::onEmergencyStopTriggered);
+    }
+    if (m_context) {
+        m_context->writeLog("INFO", "ChannelPointPlugin", "createWidget", "PluginMainWidget created and returned.");
     }
     return m_mainWidget;
 }
