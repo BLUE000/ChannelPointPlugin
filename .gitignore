@@ -1,3 +1,7 @@
+DecisionLog/
+scripts/
+.ai_rules.md
+WIP_STATE.md
 build/
 tests/
 dist/
