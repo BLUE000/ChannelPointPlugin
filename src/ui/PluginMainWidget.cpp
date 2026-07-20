@@ -370,16 +370,35 @@ void PluginMainWidget::onAddNewRewardClicked()
     setting.rewardId = QString("reward_%1").arg(QDateTime::currentMSecsSinceEpoch());
     setting.rewardName = "新規チャンネルポイント";
     setting.points = 100;
+    setting.enabled = true;
     setting.effects.append(m_effectMgr->getDefaultEffect());
 
     m_effectMgr->updateSetting(setting);
     refreshRewardList();
+
+    // 追加した項目を選択状態にする
+    int count = m_lstRewards->count();
+    if (count > 0) {
+        m_lstRewards->setCurrentRow(count - 1);
+    }
 }
 
 void PluginMainWidget::onTwitchSyncClicked()
 {
-    QMessageBox::information(this, "Twitch同期", "Twitch連携モジュールより最新のチャンネルポイント項目を同期しました。");
+    int restoredCount = 0;
+    if (m_analyticsMgr && m_effectMgr) {
+        QList<StreamSession> sessions = m_analyticsMgr->getAllSessions();
+        for (const auto& s : sessions) {
+            for (const auto& rStat : s.rewardStats.values()) {
+                if (!rStat.rewardId.isEmpty()) {
+                    m_effectMgr->ensureRewardRegistered(rStat.rewardId, rStat.rewardName, rStat.totalPoints / (rStat.count > 0 ? rStat.count : 1));
+                    restoredCount++;
+                }
+            }
+        }
+    }
     refreshRewardList();
+    QMessageBox::information(this, "Twitch同期", QString("過去のイベントおよび受信履歴より %1 件のチャンネルポイント項目を同期・検出しました。").arg(restoredCount));
 }
 
 void PluginMainWidget::onSaveSettingClicked()

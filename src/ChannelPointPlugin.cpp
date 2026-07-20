@@ -189,9 +189,12 @@ void ChannelPointPlugin::onRewardRedeemed(const TwitchRewardRedemption& redempti
 {
     if (!m_effectMgr || !m_queueMgr || !m_analyticsMgr) return;
 
+    // 未登録の報酬の場合、自動的に登録追加
+    m_effectMgr->ensureRewardRegistered(redemption.rewardId, redemption.rewardName, 0);
+
     RewardEffectSetting setting = m_effectMgr->getSetting(redemption.rewardId);
     if (!setting.enabled && !setting.rewardId.isEmpty()) {
-        return; // 無効な報酬は無視
+        return; // 無効な報酬は演出をスキップ
     }
 
     QueueItem qItem;

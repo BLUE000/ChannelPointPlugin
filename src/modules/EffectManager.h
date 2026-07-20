@@ -25,6 +25,7 @@ public:
     RewardEffectSetting getSetting(const QString& rewardId) const;
     void updateSetting(const RewardEffectSetting& setting);
     void removeSetting(const QString& rewardId);
+    void ensureRewardRegistered(const QString& rewardId, const QString& rewardName, int points = 0);
 
     // OBS 解像度設定
     QSize getObsCanvasSize() const { return m_obsCanvasSize; }

@@ -17,7 +17,7 @@ bool EffectManager::loadSettings()
 
     QByteArray data = m_context->readEncryptedFile("effect_settings.json");
     if (data.isEmpty()) {
-        // 設定データがない場合は初期状態を保持
+        // 初期状態は空(0件)で正常処理
         return false;
     }
 
@@ -173,6 +173,21 @@ void EffectManager::updateSetting(const RewardEffectSetting& setting)
 void EffectManager::removeSetting(const QString& rewardId)
 {
     if (m_settingsMap.remove(rewardId) > 0) {
+        saveSettings();
+    }
+}
+
+void EffectManager::ensureRewardRegistered(const QString& rewardId, const QString& rewardName, int points)
+{
+    if (rewardId.isEmpty()) return;
+    if (!m_settingsMap.contains(rewardId)) {
+        RewardEffectSetting setting;
+        setting.rewardId = rewardId;
+        setting.rewardName = rewardName.isEmpty() ? rewardId : rewardName;
+        setting.points = points;
+        setting.enabled = true;
+        setting.effects.append(getDefaultEffect());
+        m_settingsMap.insert(rewardId, setting);
         saveSettings();
     }
 }
