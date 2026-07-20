@@ -39,10 +39,15 @@ void ChannelPointPlugin::shutdown()
 
 QByteArray ChannelPointPlugin::iconPngData() const
 {
+    static QByteArray cachedIconData;
+    if (!cachedIconData.isEmpty()) {
+        return cachedIconData;
+    }
     // pic/ChannelPoint.png を返却
     QFile file("pic/ChannelPoint.png");
     if (file.open(QIODevice::ReadOnly)) {
-        return file.readAll();
+        cachedIconData = file.readAll();
+        return cachedIconData;
     }
     return QByteArray();
 }
