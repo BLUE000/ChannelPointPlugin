@@ -13,6 +13,11 @@ QueueManager::QueueManager(EffectManager* effectMgr, ObsNotifier* obsNotifier, Q
     connect(m_playbackTimer, &QTimer::timeout, this, &QueueManager::onPlaybackFinished);
 }
 
+int QueueManager::maxQueueSize() const
+{
+    return m_effectMgr ? m_effectMgr->getMaxQueueSize() : 20;
+}
+
 void QueueManager::pushQueue(const QueueItem& item)
 {
     if (!m_effectMgr) return;

@@ -18,6 +18,7 @@ public:
     void emergencyStop(); // 緊急停止 (キュー消去 + OBS即時クリア)
 
     int currentQueueCount() const { return m_queue.size(); }
+    int maxQueueSize() const;
     bool isPlaying() const { return m_isPlaying; }
 
 signals:
