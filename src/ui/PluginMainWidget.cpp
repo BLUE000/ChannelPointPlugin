@@ -367,10 +367,10 @@ QWidget* PluginMainWidget::createSettingsTab()
     m_spnSessionGap->setRange(10, 1440);
     m_spnSessionGap->setValue(120);
 
-    // OBSブラウザソースURL案内 (ホストアプリのアセット展開仕様 /overlay/<PluginName>/default/overlay.html に準拠)
+    // OBSブラウザソースURL案内 (ホストアプリのアセット展開仕様 /overlay/<pluginName()>/default/overlay.html に準拠)
     m_txtLanIpGuide = new QLineEdit(tab);
     m_txtLanIpGuide->setReadOnly(true);
-    m_txtLanIpGuide->setText("http://localhost:58081/overlay/ChannelPointPlugin/default/overlay.html");
+    m_txtLanIpGuide->setText("http://localhost:58081/overlay/Channel Point Manager/default/overlay.html");
 
     form->addRow("OBS キャンバス幅 (px):", m_spnCanvasWidth);
     form->addRow("OBS キャンバス高さ (px):", m_spnCanvasHeight);
