@@ -8,6 +8,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
+#include <QScrollArea>
 #include <QGroupBox>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -77,6 +78,8 @@ QWidget* PluginMainWidget::createRewardManagerTab()
 {
     QWidget* tab = new QWidget(this);
     QHBoxLayout* mainLayout = new QHBoxLayout(tab);
+    mainLayout->setContentsMargins(6, 6, 6, 6);
+    mainLayout->setSpacing(8);
 
     // 左パネル: 登録済み報酬一覧
     QVBoxLayout* leftLayout = new QVBoxLayout();
@@ -86,11 +89,11 @@ QWidget* PluginMainWidget::createRewardManagerTab()
 
     QHBoxLayout* leftBtnLayout = new QHBoxLayout();
     m_btnNewReward = new QPushButton("新規演出を登録", tab);
-    m_btnNewReward->setStyleSheet("background-color: #2e7d32; color: white; font-weight: bold;");
+    m_btnNewReward->setStyleSheet("background-color: #2e7d32; color: white; font-weight: bold; padding: 6px;");
     connect(m_btnNewReward, &QPushButton::clicked, this, &PluginMainWidget::onAddNewRewardClicked);
 
     m_btnTwitchSync = new QPushButton("Twitch同期", tab);
-    m_btnTwitchSync->setStyleSheet("background-color: #6a1b9a; color: white; font-weight: bold;");
+    m_btnTwitchSync->setStyleSheet("background-color: #6a1b9a; color: white; font-weight: bold; padding: 6px;");
     connect(m_btnTwitchSync, &QPushButton::clicked, this, &PluginMainWidget::onTwitchSyncClicked);
 
     leftBtnLayout->addWidget(m_btnNewReward);
@@ -100,27 +103,44 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     leftLayout->addWidget(m_lstRewards);
     leftLayout->addLayout(leftBtnLayout);
 
-    // 右パネル: 詳細編集フォーム (提供スクリーンショットの再現)
-    QVBoxLayout* rightLayout = new QVBoxLayout();
+    // 右パネル: スクロールエリアの構築
+    QScrollArea* rightScrollArea = new QScrollArea(tab);
+    rightScrollArea->setWidgetResizable(true);
+    rightScrollArea->setFrameShape(QFrame::NoFrame);
+    rightScrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    rightScrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+    QWidget* rightContentWidget = new QWidget(rightScrollArea);
+    QVBoxLayout* rightLayout = new QVBoxLayout(rightContentWidget);
+    rightLayout->setContentsMargins(4, 4, 8, 4);
+    rightLayout->setSpacing(10);
+
+    // フォームパーツ用の共通コントロール高さ・スタイル調整関数
+    auto applyControlStyle = [](QWidget* widget) {
+        widget->setMinimumHeight(28);
+    };
 
     // 報酬情報グループ
-    QGroupBox* grpReward = new QGroupBox("報酬情報の設定", tab);
+    QGroupBox* grpReward = new QGroupBox("報酬情報の設定", rightContentWidget);
     QFormLayout* formReward = new QFormLayout(grpReward);
+    formReward->setVerticalSpacing(8);
+    formReward->setHorizontalSpacing(10);
 
-    m_txtRewardId = new QLineEdit(grpReward);
-    m_txtRewardName = new QLineEdit(grpReward);
-    m_spnPoints = new QSpinBox(grpReward);
+    m_txtRewardId = new QLineEdit(grpReward); applyControlStyle(m_txtRewardId);
+    m_txtRewardName = new QLineEdit(grpReward); applyControlStyle(m_txtRewardName);
+    m_spnPoints = new QSpinBox(grpReward); applyControlStyle(m_spnPoints);
     m_spnPoints->setRange(0, 1000000);
-    m_spnCooldown = new QSpinBox(grpReward);
+    m_spnCooldown = new QSpinBox(grpReward); applyControlStyle(m_spnCooldown);
     m_spnCooldown->setRange(0, 86400);
 
-    m_cmbPlaybackMode = new QComboBox(grpReward);
+    m_cmbPlaybackMode = new QComboBox(grpReward); applyControlStyle(m_cmbPlaybackMode);
     m_cmbPlaybackMode->addItem("全ての演出を順番に再生 (sequential)", 0);
     m_cmbPlaybackMode->addItem("ランダムに再生 (random)", 1);
     m_cmbPlaybackMode->addItem("同時に再生 (all_at_once)", 2);
 
     m_chkEnabled = new QCheckBox("報酬演出の有効化", grpReward);
     m_chkEnabled->setChecked(true);
+    m_chkEnabled->setMinimumHeight(24);
 
     formReward->addRow("報酬 ID (Twitch):", m_txtRewardId);
     formReward->addRow("報酬名 (表示用):", m_txtRewardName);
@@ -130,24 +150,29 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     formReward->addRow("ステータス:", m_chkEnabled);
 
     // 演出効果 (エフェクト) グループ
-    QGroupBox* grpEffect = new QGroupBox("演出効果 (エフェクト) 設定", tab);
+    QGroupBox* grpEffect = new QGroupBox("演出効果 (エフェクト) 設定", rightContentWidget);
     QVBoxLayout* effectLayout = new QVBoxLayout(grpEffect);
+    effectLayout->setSpacing(8);
 
     QHBoxLayout* effSelectorLayout = new QHBoxLayout();
-    m_cmbEffectIndex = new QComboBox(grpEffect);
+    m_cmbEffectIndex = new QComboBox(grpEffect); applyControlStyle(m_cmbEffectIndex);
     m_cmbEffectIndex->addItem("演出 1");
-    m_btnAddEffect = new QPushButton("+ 演出を追加", grpEffect);
-    m_btnDeleteEffect = new QPushButton("X 削除", grpEffect);
-    m_btnDeleteEffect->setStyleSheet("color: red;");
+    m_btnAddEffect = new QPushButton("+ 演出を追加", grpEffect); applyControlStyle(m_btnAddEffect);
+    m_btnDeleteEffect = new QPushButton("X 削除", grpEffect); applyControlStyle(m_btnDeleteEffect);
+    m_btnDeleteEffect->setStyleSheet("color: red; font-weight: bold;");
     effSelectorLayout->addWidget(new QLabel("編集対象の演出:"));
     effSelectorLayout->addWidget(m_cmbEffectIndex, 1);
     effSelectorLayout->addWidget(m_btnAddEffect);
     effSelectorLayout->addWidget(m_btnDeleteEffect);
 
     m_chkCustomHtml = new QCheckBox("カスタムHTML演出として実行", grpEffect);
+    m_chkCustomHtml->setMinimumHeight(24);
 
     QFormLayout* formEffect = new QFormLayout();
-    m_cmbMediaType = new QComboBox(grpEffect);
+    formEffect->setVerticalSpacing(8);
+    formEffect->setHorizontalSpacing(10);
+
+    m_cmbMediaType = new QComboBox(grpEffect); applyControlStyle(m_cmbMediaType);
     m_cmbMediaType->addItem("画像のみ (image)", static_cast<int>(EffectMediaType::Image));
     m_cmbMediaType->addItem("音声のみ (audio)", static_cast<int>(EffectMediaType::Audio));
     m_cmbMediaType->addItem("動画のみ (video)", static_cast<int>(EffectMediaType::Video));
@@ -156,28 +181,28 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     m_cmbMediaType->addItem("カスタム (HTML/CSS/JS)", static_cast<int>(EffectMediaType::CustomHtml));
     connect(m_cmbMediaType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PluginMainWidget::onMediaTypeChanged);
 
-    m_txtImagePath = new QLineEdit(grpEffect);
-    m_txtVideoPath = new QLineEdit(grpEffect);
-    m_txtAudioPath = new QLineEdit(grpEffect);
-    m_spnDuration = new QSpinBox(grpEffect);
+    m_txtImagePath = new QLineEdit(grpEffect); applyControlStyle(m_txtImagePath);
+    m_txtVideoPath = new QLineEdit(grpEffect); applyControlStyle(m_txtVideoPath);
+    m_txtAudioPath = new QLineEdit(grpEffect); applyControlStyle(m_txtAudioPath);
+    m_spnDuration = new QSpinBox(grpEffect); applyControlStyle(m_spnDuration);
     m_spnDuration->setRange(1, 300);
     m_spnDuration->setValue(5);
-    m_spnSizePercent = new QSpinBox(grpEffect);
+    m_spnSizePercent = new QSpinBox(grpEffect); applyControlStyle(m_spnSizePercent);
     m_spnSizePercent->setRange(1, 100);
     m_spnSizePercent->setValue(60);
 
-    m_txtTextTemplate = new QLineEdit(grpEffect);
+    m_txtTextTemplate = new QLineEdit(grpEffect); applyControlStyle(m_txtTextTemplate);
     m_txtTextTemplate->setPlaceholderText("例: {user} が {reward} を使用した！");
 
-    m_cmbPositionPreset = new QComboBox(grpEffect);
+    m_cmbPositionPreset = new QComboBox(grpEffect); applyControlStyle(m_cmbPositionPreset);
     m_cmbPositionPreset->addItem("カスタム座標 (custom)");
     m_cmbPositionPreset->addItem("中央 (center)");
     m_cmbPositionPreset->addItem("左上 (top_left)");
 
     QHBoxLayout* posLayout = new QHBoxLayout();
-    m_spnCenterX = new QSpinBox(grpEffect);
+    m_spnCenterX = new QSpinBox(grpEffect); applyControlStyle(m_spnCenterX);
     m_spnCenterX->setRange(0, 7680);
-    m_spnCenterY = new QSpinBox(grpEffect);
+    m_spnCenterY = new QSpinBox(grpEffect); applyControlStyle(m_spnCenterY);
     m_spnCenterY->setRange(0, 4320);
     posLayout->addWidget(new QLabel("X:"));
     posLayout->addWidget(m_spnCenterX);
@@ -204,20 +229,35 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     effectLayout->addWidget(m_previewWidget);
 
     // 下部アクションボタンエリア
-    m_btnTestPlay = new QPushButton("▶ 演出をテスト再生 (OBS)", tab);
-    m_btnTestPlay->setStyleSheet("background-color: #8e24aa; color: white; font-weight: bold; font-size: 14px; padding: 8px;");
+    m_btnTestPlay = new QPushButton("▶ 演出をテスト再生 (OBS)", rightContentWidget);
+    m_btnTestPlay->setStyleSheet("background-color: #8e24aa; color: white; font-weight: bold; font-size: 14px; padding: 8px; min-height: 32px;");
     connect(m_btnTestPlay, &QPushButton::clicked, this, &PluginMainWidget::onTestPlayClicked);
 
     QHBoxLayout* bottomActionLayout = new QHBoxLayout();
-    m_btnSaveSetting = new QPushButton("設定を保存", tab);
-    m_btnSaveSetting->setStyleSheet("background-color: #0288d1; color: white; font-weight: bold;");
+    m_btnSaveSetting = new QPushButton("設定を保存", rightContentWidget);
+    m_btnSaveSetting->setStyleSheet("background-color: #0288d1; color: white; font-weight: bold; padding: 8px; min-height: 28px;");
     connect(m_btnSaveSetting, &QPushButton::clicked, this, &PluginMainWidget::onSaveSettingClicked);
 
-    m_btnDeleteReward = new QPushButton("この報酬を削除", tab);
-    m_btnDeleteReward->setStyleSheet("background-color: #d32f2f; color: white; font-weight: bold;");
+    m_btnDeleteReward = new QPushButton("この報酬を削除", rightContentWidget);
+    m_btnDeleteReward->setStyleSheet("background-color: #d32f2f; color: white; font-weight: bold; padding: 8px; min-height: 28px;");
     connect(m_btnDeleteReward, &QPushButton::clicked, this, &PluginMainWidget::onDeleteRewardClicked);
 
     bottomActionLayout->addWidget(m_btnSaveSetting);
+    bottomActionLayout->addWidget(m_btnDeleteReward);
+
+    rightLayout->addWidget(grpReward);
+    rightLayout->addWidget(grpEffect);
+    rightLayout->addWidget(m_btnTestPlay);
+    rightLayout->addLayout(bottomActionLayout);
+
+    rightScrollArea->setWidget(rightContentWidget);
+
+    // メインレイアウトに左パネルと右スクロールエリアを配置
+    mainLayout->addLayout(leftLayout, 35);
+    mainLayout->addWidget(rightScrollArea, 65);
+
+    return tab;
+}
     bottomActionLayout->addWidget(m_btnDeleteReward);
 
     rightLayout->addWidget(grpReward);
