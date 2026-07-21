@@ -364,11 +364,10 @@ QWidget* PluginMainWidget::createSettingsTab()
     m_spnSessionGap->setRange(10, 1440);
     m_spnSessionGap->setValue(120);
 
-    // 同一LAN内別PC (2PC OBS) 参照用案内
+    // OBSブラウザソースURL案内 (標準: localhost:58081, 2PC用LAN IP付記)
     m_txtLanIpGuide = new QLineEdit(tab);
     m_txtLanIpGuide->setReadOnly(true);
 
-    // アクティブなローカルLAN IP取得 (169.254.x.x APIPA や無効アダプタを除外)
     QString localIp = "127.0.0.1";
     for (const QNetworkInterface& netInterface : QNetworkInterface::allInterfaces()) {
         QNetworkInterface::InterfaceFlags flags = netInterface.flags();
@@ -377,30 +376,29 @@ QWidget* PluginMainWidget::createSettingsTab()
                 QHostAddress addr = entry.ip();
                 if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
                     QString ipStr = addr.toString();
-                    if (ipStr.startsWith("169.254.")) {
-                        continue; // APIPA (リンクローカル) を除外
-                    }
+                    if (ipStr.startsWith("169.254.")) continue;
                     if (ipStr.startsWith("192.168.") || ipStr.startsWith("10.") || ipStr.startsWith("172.")) {
                         localIp = ipStr;
                         break;
-                    } else if (localIp == "127.0.0.1") {
-                        localIp = ipStr;
                     }
                 }
             }
         }
-        if (localIp.startsWith("192.168.") || localIp.startsWith("10.") || localIp.startsWith("172.")) {
-            break;
-        }
+        if (localIp != "127.0.0.1") break;
     }
-    m_txtLanIpGuide->setText(QString("http://%1:<PORT>/ (2PC OBS参照用)").arg(localIp));
+
+    if (localIp != "127.0.0.1") {
+        m_txtLanIpGuide->setText(QString("http://localhost:58081/  (2PC配信時: http://%1:58081/)").arg(localIp));
+    } else {
+        m_txtLanIpGuide->setText("http://localhost:58081/");
+    }
 
     form->addRow("OBS キャンバス幅 (px):", m_spnCanvasWidth);
     form->addRow("OBS キャンバス高さ (px):", m_spnCanvasHeight);
     form->addRow("最大キュー保持数:", m_spnMaxQueue);
     form->addRow("キュー超過時の動作:", m_cmbOverflowPolicy);
     form->addRow("配信セッションギャップ (分):", m_spnSessionGap);
-    form->addRow("同一LAN OBS参照ガイド:", m_txtLanIpGuide);
+    form->addRow("OBS ブラウザソース URL:", m_txtLanIpGuide);
 
     return tab;
 }
