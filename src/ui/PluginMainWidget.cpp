@@ -182,8 +182,32 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     connect(m_cmbMediaType, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &PluginMainWidget::onMediaTypeChanged);
 
     m_txtImagePath = new QLineEdit(grpEffect); applyControlStyle(m_txtImagePath);
+    m_btnBrowseImage = new QPushButton("参照...", grpEffect); applyControlStyle(m_btnBrowseImage);
+    m_btnBrowseImage->setStyleSheet("padding: 2px 10px; font-size: 12px;");
+    connect(m_btnBrowseImage, &QPushButton::clicked, this, &PluginMainWidget::onBrowseImageClicked);
+    QHBoxLayout* imageLayout = new QHBoxLayout();
+    imageLayout->setContentsMargins(0, 0, 0, 0);
+    imageLayout->addWidget(m_txtImagePath, 1);
+    imageLayout->addWidget(m_btnBrowseImage);
+
     m_txtVideoPath = new QLineEdit(grpEffect); applyControlStyle(m_txtVideoPath);
+    m_btnBrowseVideo = new QPushButton("参照...", grpEffect); applyControlStyle(m_btnBrowseVideo);
+    m_btnBrowseVideo->setStyleSheet("padding: 2px 10px; font-size: 12px;");
+    connect(m_btnBrowseVideo, &QPushButton::clicked, this, &PluginMainWidget::onBrowseVideoClicked);
+    QHBoxLayout* videoLayout = new QHBoxLayout();
+    videoLayout->setContentsMargins(0, 0, 0, 0);
+    videoLayout->addWidget(m_txtVideoPath, 1);
+    videoLayout->addWidget(m_btnBrowseVideo);
+
     m_txtAudioPath = new QLineEdit(grpEffect); applyControlStyle(m_txtAudioPath);
+    m_btnBrowseAudio = new QPushButton("参照...", grpEffect); applyControlStyle(m_btnBrowseAudio);
+    m_btnBrowseAudio->setStyleSheet("padding: 2px 10px; font-size: 12px;");
+    connect(m_btnBrowseAudio, &QPushButton::clicked, this, &PluginMainWidget::onBrowseAudioClicked);
+    QHBoxLayout* audioLayout = new QHBoxLayout();
+    audioLayout->setContentsMargins(0, 0, 0, 0);
+    audioLayout->addWidget(m_txtAudioPath, 1);
+    audioLayout->addWidget(m_btnBrowseAudio);
+
     m_spnDuration = new QSpinBox(grpEffect); applyControlStyle(m_spnDuration);
     m_spnDuration->setRange(1, 300);
     m_spnDuration->setValue(5);
@@ -210,9 +234,9 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     posLayout->addWidget(m_spnCenterY);
 
     formEffect->addRow("演出の種類:", m_cmbMediaType);
-    formEffect->addRow("画像ファイル:", m_txtImagePath);
-    formEffect->addRow("動画ファイル:", m_txtVideoPath);
-    formEffect->addRow("効果音ファイル:", m_txtAudioPath);
+    formEffect->addRow("画像ファイル:", imageLayout);
+    formEffect->addRow("動画ファイル:", videoLayout);
+    formEffect->addRow("効果音ファイル:", audioLayout);
     formEffect->addRow("表示・演出時間 (秒):", m_spnDuration);
     formEffect->addRow("表示サイズ (1-100%):", m_spnSizePercent);
     formEffect->addRow("吹き出し表示文字列:", m_txtTextTemplate);
@@ -507,7 +531,46 @@ void PluginMainWidget::onPreviewPositionChanged(int newX, int newY)
 void PluginMainWidget::onEmergencyStopClicked()
 {
     emit emergencyStopTriggered();
-    QMessageBox::warning(this, "緊急停止", "演出キューを全クリアし、OBS演出を緊急停止しました。");
+    QMessageBox::information(this, "緊急停止", "演出再生キューを消去し、OBS上の画面表示を即時消去しました。");
+}
+
+void PluginMainWidget::onBrowseImageClicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(
+        this,
+        "画像ファイルを選択",
+        m_txtImagePath->text(),
+        "画像ファイル (*.png *.jpg *.jpeg *.gif *.webp);;すべてのファイル (*.*)"
+    );
+    if (!filePath.isEmpty()) {
+        m_txtImagePath->setText(filePath);
+    }
+}
+
+void PluginMainWidget::onBrowseVideoClicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(
+        this,
+        "動画ファイルを選択",
+        m_txtVideoPath->text(),
+        "動画ファイル (*.mp4 *.webm *.avi *.mov);;すべてのファイル (*.*)"
+    );
+    if (!filePath.isEmpty()) {
+        m_txtVideoPath->setText(filePath);
+    }
+}
+
+void PluginMainWidget::onBrowseAudioClicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(
+        this,
+        "効果音ファイルを選択",
+        m_txtAudioPath->text(),
+        "音声ファイル (*.mp3 *.wav *.ogg *.aac *.flac);;すべてのファイル (*.*)"
+    );
+    if (!filePath.isEmpty()) {
+        m_txtAudioPath->setText(filePath);
+    }
 }
 
 void PluginMainWidget::onSessionSelected(int index)

@@ -40,6 +40,9 @@ private slots:
     void onMediaTypeChanged(int index);
     void onPreviewPositionChanged(int newX, int newY);
     void onEmergencyStopClicked();
+    void onBrowseImageClicked();
+    void onBrowseVideoClicked();
+    void onBrowseAudioClicked();
 
     // 統計タブ操作
     void onSessionSelected(int index);
@@ -87,8 +90,11 @@ private:
     QCheckBox* m_chkCustomHtml;
     QComboBox* m_cmbMediaType;
     QLineEdit* m_txtImagePath;
+    QPushButton* m_btnBrowseImage;
     QLineEdit* m_txtVideoPath;
+    QPushButton* m_btnBrowseVideo;
     QLineEdit* m_txtAudioPath;
+    QPushButton* m_btnBrowseAudio;
     QSpinBox* m_spnDuration;
     QSpinBox* m_spnSizePercent;
     QLineEdit* m_txtTextTemplate;
