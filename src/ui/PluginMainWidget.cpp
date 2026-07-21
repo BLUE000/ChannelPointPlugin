@@ -388,9 +388,9 @@ QWidget* PluginMainWidget::createSettingsTab()
     }
 
     if (localIp != "127.0.0.1") {
-        m_txtLanIpGuide->setText(QString("http://localhost:58081/  (2PC配信時: http://%1:58081/)").arg(localIp));
+        m_txtLanIpGuide->setText(QString("http://localhost:58081/overlay/ChannelPointPlugin/overlay.html  (2PC配信時: http://%1:58081/overlay/ChannelPointPlugin/overlay.html)").arg(localIp));
     } else {
-        m_txtLanIpGuide->setText("http://localhost:58081/");
+        m_txtLanIpGuide->setText("http://localhost:58081/overlay/ChannelPointPlugin/overlay.html");
     }
 
     form->addRow("OBS キャンバス幅 (px):", m_spnCanvasWidth);

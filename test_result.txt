@@ -1,0 +1,14 @@
+********* Start testing of PluginAutoTestSuite *********
+Config: Using QtTest library 6.10.1, Qt 6.10.1 (x86_64-little_endian-llp64 shared (dynamic) release build; by GCC 13.1.0), windows 11
+PASS   : PluginAutoTestSuite::initTestCase()
+PASS   : PluginAutoTestSuite::testEffectManager()
+PASS   : PluginAutoTestSuite::testQueueManager_overflowAndEmergencyStop()
+PASS   : PluginAutoTestSuite::testVisualPreviewWidget_boundaryCheck()
+PASS   : PluginAutoTestSuite::testAnalyticsManager_autoSessionRotation()
+PASS   : PluginAutoTestSuite::testIntegration_eventToObsPipeline()
+PASS   : PluginAutoTestSuite::testIntegration_emergencyStopPipeline()
+PASS   : PluginAutoTestSuite::testSystem_spam100EventsEndurance()
+PASS   : PluginAutoTestSuite::testSystem_dataPersistenceAndRestore()
+PASS   : PluginAutoTestSuite::cleanupTestCase()
+Totals: 10 passed, 0 failed, 0 skipped, 0 blacklisted, 4ms
+********* Finished testing of PluginAutoTestSuite *********
