@@ -364,34 +364,10 @@ QWidget* PluginMainWidget::createSettingsTab()
     m_spnSessionGap->setRange(10, 1440);
     m_spnSessionGap->setValue(120);
 
-    // OBSブラウザソースURL案内 (標準: localhost:58081, 2PC用LAN IP付記)
+    // OBSブラウザソースURL案内
     m_txtLanIpGuide = new QLineEdit(tab);
     m_txtLanIpGuide->setReadOnly(true);
-
-    QString localIp = "127.0.0.1";
-    for (const QNetworkInterface& netInterface : QNetworkInterface::allInterfaces()) {
-        QNetworkInterface::InterfaceFlags flags = netInterface.flags();
-        if ((flags & QNetworkInterface::IsUp) && (flags & QNetworkInterface::IsRunning)) {
-            for (const QNetworkAddressEntry& entry : netInterface.addressEntries()) {
-                QHostAddress addr = entry.ip();
-                if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
-                    QString ipStr = addr.toString();
-                    if (ipStr.startsWith("169.254.")) continue;
-                    if (ipStr.startsWith("192.168.") || ipStr.startsWith("10.") || ipStr.startsWith("172.")) {
-                        localIp = ipStr;
-                        break;
-                    }
-                }
-            }
-        }
-        if (localIp != "127.0.0.1") break;
-    }
-
-    if (localIp != "127.0.0.1") {
-        m_txtLanIpGuide->setText(QString("http://localhost:58081/overlay/ChannelPointPlugin/overlay.html  (2PC配信時: http://%1:58081/overlay/ChannelPointPlugin/overlay.html)").arg(localIp));
-    } else {
-        m_txtLanIpGuide->setText("http://localhost:58081/overlay/ChannelPointPlugin/overlay.html");
-    }
+    m_txtLanIpGuide->setText("http://localhost:58081/overlay/ChannelPointPlugin/overlay.html");
 
     form->addRow("OBS キャンバス幅 (px):", m_spnCanvasWidth);
     form->addRow("OBS キャンバス高さ (px):", m_spnCanvasHeight);
