@@ -258,18 +258,6 @@ QWidget* PluginMainWidget::createRewardManagerTab()
 
     return tab;
 }
-    bottomActionLayout->addWidget(m_btnDeleteReward);
-
-    rightLayout->addWidget(grpReward);
-    rightLayout->addWidget(grpEffect);
-    rightLayout->addWidget(m_btnTestPlay);
-    rightLayout->addLayout(bottomActionLayout);
-
-    mainLayout->addLayout(leftLayout, 1);
-    mainLayout->addLayout(rightLayout, 2);
-
-    return tab;
-}
 
 QWidget* PluginMainWidget::createAnalyticsTab()
 {
