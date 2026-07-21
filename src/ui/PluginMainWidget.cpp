@@ -246,6 +246,9 @@ QWidget* PluginMainWidget::createRewardManagerTab()
     // 視覚的プレビューウィジェット
     m_previewWidget = new VisualPreviewWidget(grpEffect);
     connect(m_previewWidget, &VisualPreviewWidget::positionChanged, this, &PluginMainWidget::onPreviewPositionChanged);
+    connect(m_spnCenterX, QOverload<int>::of(&QSpinBox::valueChanged), this, &PluginMainWidget::updatePreviewFromControls);
+    connect(m_spnCenterY, QOverload<int>::of(&QSpinBox::valueChanged), this, &PluginMainWidget::updatePreviewFromControls);
+    connect(m_spnSizePercent, QOverload<int>::of(&QSpinBox::valueChanged), this, &PluginMainWidget::updatePreviewFromControls);
 
     effectLayout->addLayout(effSelectorLayout);
     effectLayout->addWidget(m_chkCustomHtml);
@@ -517,6 +520,16 @@ void PluginMainWidget::onPreviewPositionChanged(int newX, int newY)
 {
     m_spnCenterX->setValue(newX);
     m_spnCenterY->setValue(newY);
+}
+
+void PluginMainWidget::updatePreviewFromControls()
+{
+    if (!m_previewWidget) return;
+    EffectItem item;
+    item.centerX = m_spnCenterX->value();
+    item.centerY = m_spnCenterY->value();
+    item.sizePercent = m_spnSizePercent->value();
+    m_previewWidget->setEffectItem(item);
 }
 
 void PluginMainWidget::onEmergencyStopClicked()

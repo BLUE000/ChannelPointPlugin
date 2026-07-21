@@ -43,6 +43,7 @@ private slots:
     void onBrowseImageClicked();
     void onBrowseVideoClicked();
     void onBrowseAudioClicked();
+    void updatePreviewFromControls();
 
     // 統計タブ操作
     void onSessionSelected(int index);
