@@ -372,13 +372,10 @@ QWidget* PluginMainWidget::createSettingsTab()
     QString localIp = "127.0.0.1";
     for (const QNetworkInterface& netInterface : QNetworkInterface::allInterfaces()) {
         QNetworkInterface::InterfaceFlags flags = netInterface.flags();
-        if ((flags & QNetworkInterface::IsUp) &&
-            (flags & QNetworkInterface::IsRunning) &&
-            !(flags & QNetworkInterface::IsLoopback)) {
-
+        if ((flags & QNetworkInterface::IsUp) && (flags & QNetworkInterface::IsRunning)) {
             for (const QNetworkAddressEntry& entry : netInterface.addressEntries()) {
                 QHostAddress addr = entry.ip();
-                if (addr.protocol() == QAbstractSocket::IPv4Protocol) {
+                if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
                     QString ipStr = addr.toString();
                     if (ipStr.startsWith("169.254.")) {
                         continue; // APIPA (リンクローカル) を除外
