@@ -368,11 +368,31 @@ QWidget* PluginMainWidget::createSettingsTab()
     m_txtLanIpGuide = new QLineEdit(tab);
     m_txtLanIpGuide->setReadOnly(true);
 
-    // ローカルIP取得
+    // アクティブなローカルLAN IP取得 (169.254.x.x APIPA や無効アダプタを除外)
     QString localIp = "127.0.0.1";
-    for (const QHostAddress& addr : QNetworkInterface::allAddresses()) {
-        if (addr.protocol() == QAbstractSocket::IPv4Protocol && !addr.isLoopback()) {
-            localIp = addr.toString();
+    for (const QNetworkInterface& netInterface : QNetworkInterface::allInterfaces()) {
+        QNetworkInterface::InterfaceFlags flags = netInterface.flags();
+        if ((flags & QNetworkInterface::IsUp) &&
+            (flags & QNetworkInterface::IsRunning) &&
+            !(flags & QNetworkInterface::IsLoopback)) {
+
+            for (const QNetworkAddressEntry& entry : netInterface.addressEntries()) {
+                QHostAddress addr = entry.ip();
+                if (addr.protocol() == QAbstractSocket::IPv4Protocol) {
+                    QString ipStr = addr.toString();
+                    if (ipStr.startsWith("169.254.")) {
+                        continue; // APIPA (リンクローカル) を除外
+                    }
+                    if (ipStr.startsWith("192.168.") || ipStr.startsWith("10.") || ipStr.startsWith("172.")) {
+                        localIp = ipStr;
+                        break;
+                    } else if (localIp == "127.0.0.1") {
+                        localIp = ipStr;
+                    }
+                }
+            }
+        }
+        if (localIp.startsWith("192.168.") || localIp.startsWith("10.") || localIp.startsWith("172.")) {
             break;
         }
     }
